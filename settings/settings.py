@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'LITReview',
-    'Authentification'
+    'litreview',
+    'authentification'
 ]
 
 MIDDLEWARE = [
@@ -101,6 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'authentification.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
