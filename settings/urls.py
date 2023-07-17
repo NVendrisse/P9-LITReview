@@ -20,5 +20,6 @@ from litreview import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('user')
+    path('login/', views.login_page),
+    path('new_account/', views.create_user)
 ]
