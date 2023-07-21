@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>LITReview</title>
+    </head>
+    <body>
+        <header>
+            <h1>LITReview</h1>
+            <menu>
+                <a href="">Mes flux</a>
+                <a href="">Mes posts</a>
+                <a href="">Mes abonnements</a>
+                <a href="{% url 'logout' %}">Me déconnecter</a>
+            </menu>
+        </header>
+        {% block content %}{% endblock content %}
+    </body>
+</html>

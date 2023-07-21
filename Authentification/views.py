@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.conf import settings
 from . import forms
+
+def log_out(user):
+    logout(user)
+    return redirect('login')
 
 def login_page(requested_user):
     form = forms.LoginForm()

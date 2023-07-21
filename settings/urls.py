@@ -22,6 +22,7 @@ from litreview import views as main_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', auth_view.login_page, name='login'),
+    path('logout/', auth_view.log_out, name='logout'),
     path('new_account/', auth_view.create_user, name="signup"),
     path('home/', main_views.personnal_feed, name="home")
 ]
