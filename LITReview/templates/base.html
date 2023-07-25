@@ -6,9 +6,9 @@
         <header>
             <h1>LITReview</h1>
             <menu>
-                <a href="">Mes flux</a>
+                <a href="{% url 'home' %}">Mes flux</a>
                 <a href="">Mes posts</a>
-                <a href="">Mes abonnements</a>
+                <a href="{% url 'subscription' %}">Mes abonnements</a>
                 <a href="{% url 'logout' %}">Me déconnecter</a>
             </menu>
         </header>

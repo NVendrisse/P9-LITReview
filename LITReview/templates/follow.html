@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <h2>Mes abonnements</h2>
-    <p>Bienvenu {{ user }}</p>
+    <p>Bienvenue {{ user }}</p>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit">Yep</button>
+    </form>
 {% endblock content %}
