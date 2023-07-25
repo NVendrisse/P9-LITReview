@@ -1,0 +1,17 @@
+<html>
+    <head><title>LITReview</title></head>
+    <body>
+        <h1>Login</h1>
+        <p>Welcome to LITReview</p>
+        <section>
+            <form method="post">
+                {{form.as_p}}
+                {% csrf_token %}
+                <button type="submit" >Log In</button>
+            </form>
+        </section>
+        <section>
+            <a href="{% url 'signup' %}"><button>Create an account</button></a>
+        </section>
+    </body>
+</html>
