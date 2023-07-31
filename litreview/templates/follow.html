@@ -1,10 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Mes abonnements</h2>
+    <h2>Suivre des utilisateurs</h2>
     <p>Bienvenue {{ user }}</p>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
-        <button type="submit"> Yep</button>
+        <button type="submit">S'abonner</button>
     </form>
+    <div>
+        <h3>Mes abonnements</h3>
+        {% for sub in follows %}
+            {% if sub.user == request.user %}
+                <p>{{ sub.followed_user }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Mes abonné(e)s</h3>
+        {% for sub in follows %}
+            {% if sub.followed_user == request.user %}
+                <p>{{ sub.user }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock content %}
