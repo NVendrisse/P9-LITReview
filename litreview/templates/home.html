@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Home</h2>
-    <p>Bienvenue {{ user }}</p>
+<h2>Home</h2>
+<p>Bienvenue {{ user }}</p>
+<div class="container-fluid">
+    <button class="btn btn-info" data-toggle="modal" data-target="#newTicket">
+        <span class="glyphicon glyphicon-plus"></span>
+        Nouveau ticket
+    </button>
+    <div id="newTicket" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            {% include "new.html" %}
+        </div>
+    </div>
+</div>
 {% endblock content %}

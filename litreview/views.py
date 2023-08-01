@@ -3,10 +3,21 @@ from . import forms, models
 from authentification import models as auth
 
 def personnal_feed(user):
+    subscripted_user = models.UserFollows.objects.all()
+    tickets = models.Ticket.objects.all()
     return render(user, "home.html")
 
+def new_ticket(request):
+    tickets = models.Ticket.objects.all()
+    form = forms.NewTicketForm()
+    if request.method == 'POST':
+        form = forms.NewTicketForm(request.POST)
+        if form.is_valid():
+            form.user = request.user
+            form.save
+    return render(request, "new.html", context={'form':form})
+
 def subscription(request):
-    #la
     form = forms.SocialForm()
     all_users = auth.User.objects.all()
     follows = models.UserFollows.objects.all()

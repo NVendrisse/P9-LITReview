@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>LITReview</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <img src="{% static 'images\logo_notext.png' %}" alt="logo">
+                        <h1 class="navbar-brand">LITReview</h1>
+                </div>
+                </div>
+            </nav>
+        </header>
+        {% block content %}{% endblock content %}
+    </body>
+</html>

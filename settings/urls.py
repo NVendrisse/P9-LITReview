@@ -25,5 +25,6 @@ urlpatterns = [
     path('logout/', auth_view.log_out, name='logout'),
     path('new_account/', auth_view.create_user, name="signup"),
     path('home/', main_views.personnal_feed, name="home"),
-    path('subscription/', main_views.subscription, name="subscription")
+    path('subscription/', main_views.subscription, name="subscription"),
+    path('new-ticket/', main_views.new_ticket, name="new"),
 ]

@@ -1,26 +1,35 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
     <h2>Suivre des utilisateurs</h2>
-    <p>Bienvenue {{ user }}</p>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit">S'abonner</button>
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label>Sélectionner un utilisateur</label>
+            {{ form.followed_user }}
+            {% csrf_token %}
+        </div>
+        <button class="btn btn-success" type="submit">S'abonner</button>
     </form>
-    <div>
+
+    <div class="container-fluid">
         <h3>Mes abonnements</h3>
-        {% for sub in follows %}
-            {% if sub.user == request.user %}
-                <p>{{ sub.followed_user }}</p>
-            {% endif %}
-        {% endfor %}
+        <table class="table-hover table-bordered">
+            {% for sub in follows %}
+                    {% if sub.user == request.user %}
+                        <tr><td>{{ sub.followed_user }}</td></tr>  
+                    {% endif %}
+            {% endfor %}
+        </table>
     </div>
-    <div>
+
+    <div class="container-fluid">
         <h3>Mes abonné(e)s</h3>
-        {% for sub in follows %}
-            {% if sub.followed_user == request.user %}
-                <p>{{ sub.user }}</p>
-            {% endif %}
-        {% endfor %}
+        <table class="table-hover table-bordered">
+            {% for sub in follows %}
+                    {% if sub.followed_user == request.user %}
+                        <tr><td>{{ sub.user }}</td></tr>  
+                    {% endif %}
+            {% endfor %}
+        </table> 
     </div>
 {% endblock content %}
