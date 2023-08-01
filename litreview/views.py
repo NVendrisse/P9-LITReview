@@ -8,13 +8,13 @@ def personnal_feed(user):
     return render(user, "home.html")
 
 def new_ticket(request):
-    tickets = models.Ticket.objects.all()
     form = forms.NewTicketForm()
     if request.method == 'POST':
         form = forms.NewTicketForm(request.POST)
         if form.is_valid():
             form.user = request.user
-            form.save
+            form.save()
+            return redirect('home')
     return render(request, "new.html", context={'form':form})
 
 def subscription(request):

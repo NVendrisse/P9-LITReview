@@ -3,5 +3,22 @@
         <div class="modal-header">
             <h1 class="modal-title">Ticket</h1>
         </div>    
-        <div class="modal-body" >{{ form }}</div>
+        <div class="modal-body" >
+            <div>Body
+                <form method="post">
+                    <div class="form-group"></div>
+                        
+                        {{ form }}
+                        {% csrf_token %}
+                        
+                    </div>
+                <button class="btn btn-success" type="submit">Poster</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+        </div>
     </div>
+
+    

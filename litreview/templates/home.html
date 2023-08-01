@@ -4,11 +4,11 @@
 <p>Bienvenue {{ user }}</p>
 <div class="container-fluid">
     <button class="btn btn-info" data-toggle="modal" data-target="#newTicket">
-        <span class="glyphicon glyphicon-plus"></span>
+        <i class="fa fa-plus-square"></i>
         Nouveau ticket
     </button>
-    <div id="newTicket" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    <div id="newTicket" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
             {% include "new.html" %}
         </div>
     </div>
