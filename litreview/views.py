@@ -2,20 +2,25 @@ from django.shortcuts import render, redirect
 from . import forms, models
 from authentification import models as auth
 
-def personnal_feed(user):
-    subscripted_user = models.UserFollows.objects.all()
-    tickets = models.Ticket.objects.all()
-    return render(user, "home.html")
 
-def new_ticket(request):
-    form = forms.NewTicketForm()
-    if request.method == 'POST':
-        form = forms.NewTicketForm(request.POST)
-        if form.is_valid():
-            form.user = request.user
-            form.save()
-            return redirect('home')
-    return render(request, "new.html", context={'form':form})
+class personnal_feed:
+    
+    def feed(request):
+        subscripted_user = models.UserFollows.objects.all()
+        tickets = models.Ticket.objects.all()
+        return render(request, "home.html")
+
+    def ticket_form(request):
+        form = forms.NewTicketForm()
+        if request.method == 'POST':
+            form = forms.NewTicketForm(request.POST)
+            if form.is_valid():
+                save_form = form.save(commit=False)
+                save_form.user = request.user
+                save_form.save()
+                return redirect('home')
+        return render(request, "home.html", context={'form':form})
+    
 
 def subscription(request):
     form = forms.SocialForm()

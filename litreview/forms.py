@@ -12,3 +12,4 @@ class NewTicketForm(forms.ModelForm):
     class Meta:
         model = models.Ticket
         fields = ['title', 'description', 'image']
+
