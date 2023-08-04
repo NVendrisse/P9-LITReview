@@ -1,39 +1,65 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Home</h2>
-<p>Bienvenue {{ user }}</p>
 <div class="container-fluid">
-    <button class="btn btn-info" data-toggle="modal" data-target="#newTicket">
-        <i class="fa fa-plus-square"></i>
-        Demander une critique
-    </button>
-    <!--button class="btn btn-info" data-toggle="modal" data-target="#newReview">
-        <i class="fa fa-plus-square"></i>
-        Créer une critique
-    </button-->
-    <div id="newTicket" class="modal fade">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title">Ticket</h1>
-                </div>    
-                <div class="modal-body" >
-                    <div>
-                        <form method="post">
-                            <div class="form-group"></div>
-                
-                                {{ form.as_p }}
-                                {% csrf_token %}
-                                
-                            </div>
-                        <button class="btn btn-success" type="submit">Poster</button>
-                        </form>
+    <a href="{% url 'ticket' %}">
+        <button class="btn btn-outline-info">
+            <i class="fa fa-plus-square"></i>
+            Demander une critique
+        </button>
+    </a>
+    <a href="{% url 'review' %}">
+        <button class="btn btn-outline-warning">
+            <i class="fa fa-plus-square"></i>
+            Créer une critique
+        </button>
+    </a>
+</div>
+<div class="container">
+    {% for item in feed %}
+        {% if item.ticket %}
+        <div class="card">   
+            <div class="card-header bg-primary">
+                <p class="font-italic">Publié par {{ item.user }} en réponse à {{ item.ticket.user }} le {{ item.time_created }}</p>
+                <h4 class="card-title text-center">{{ item.headline }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ item.body }}</p>
+            </div>
+                <div class="card">   
+                    <div class="card-header bg-secondary">
+                        <p class="font-italic">Publié par {{ item.ticket.user }} le {{ item.ticket.time_created }}</p>
+                        <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    <div class="card-body">
+                        <p class="card-text">{{ item.ticket.description }}</p>
+                    </div>
+                    <div class="card-footer bg-secondary">
+                        
+                    </div>
+                <div class="card-footer bg-primary">
+                    
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="card">   
+            <div class="card-header bg-secondary">
+                <p class="font-italic">Publié par {{ item.user }} le {{ item.time_created }}</p>
+                <h4 class="card-title text-center">{{ item.title }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ item.description }}</p>
+            </div>
+            <div class="card-footer bg-secondary">
+                <button class="btn btn-outline-primary">
+                    <i class="fa fa-pen-fancy"></i>
+                    Créer une critique
+                </button>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    
 </div>
 {% endblock content %}
