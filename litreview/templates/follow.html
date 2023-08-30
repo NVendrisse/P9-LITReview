@@ -2,34 +2,43 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h2>Suivre des utilisateurs</h2>
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <p>{{error}}</p>
+        </div>
+    {% endif %}
     <form class="form-horizontal" method="post">
         <div class="form-group">
-            <label>Sélectionner un utilisateur</label>
-            {{ form.followed_user }}
+            <input list="users" name="searchbar" class="form-control" placeholder="Rechercher un utilisateur">
+            <datalist id="users">
+                {% for sub in follows %}
+                    <option value="{{ sub.user }}"></option>
+                {% endfor %}
+            </datalist>    
             {% csrf_token %}
         </div>
-        <button class="btn btn-success" type="submit">S'abonner</button>
+        <input class="btn btn-success" type="submit"></input>
     </form>
 
     <div class="container-fluid mx-auto">
         <h3>Mes abonnements</h3>
-        <table class="table-hover table-bordered">
-            {% for sub in follows %}
-                    {% if sub.user == request.user %}
-                        <tr><td>{{ sub.followed_user }}</td></tr>  
-                    {% endif %}
+        <table class="table-bordered table-responsive">
+            {% for person in subscripted %}
+                    <tr>
+                        <td>{{ person.followed_user }}</td>
+                        <td><form action="{% url 'unsuscribe' person.followed_user.id %}" method="post">{% csrf_token %}<button class="btn btn-warning">Se désabonner</button></form></td>
+                    </tr>  
             {% endfor %}
         </table>
     </div>
 
     <div class="container-fluid mx-auto">
         <h3>Mes abonné(e)s</h3>
-        <table class="table-hover table-bordered">
-            {% for sub in follows %}
-                    {% if sub.followed_user == request.user %}
-                        <tr><td>{{ sub.user }}</td></tr>  
-                    {% endif %}
+        <table class="table-bordered table-responsive">
+            {% for person in follows %}
+                    <tr><td>{{ person.user }}</td></tr>  
             {% endfor %}
         </table> 
     </div>
+    
 {% endblock content %}

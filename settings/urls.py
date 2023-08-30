@@ -28,5 +28,5 @@ urlpatterns = [
     path('newticket/', main_views.ticket_form, name="ticket"),
     path('newreview/', main_views.review_form, name="review"),
     path('subscription/', main_views.subscription, name="subscription"),
-    
+    path('unsuscribe/<int:id>/', main_views.unsuscribe, name="unsuscribe"),
 ]

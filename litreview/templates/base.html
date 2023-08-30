@@ -17,12 +17,13 @@
                 <div class="navbar-header">
                     <img src="{% static 'images\logo_notext.png' %}" alt="logo" width="25%" height="25%">
                     <h1 class="navbar-brand">LITReview</h1>
-                
-                <ul class="navbar-nav mr-auto">
+                    
+                <ul class="navbar-nav nav-tabs mr-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Mes flux</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Mes posts</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'subscription' %}">Mes abonnements</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Me déconnecter</a></li>
+                    
                 </ul>
             </div>
             </div>

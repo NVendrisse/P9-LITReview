@@ -1,17 +1,21 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
+from django.db import IntegrityError
 from . import forms, models
 from authentification import models as auth
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def personnal_feed(request):
         subscripted_user = models.UserFollows.objects.filter(user=request.user)
         subs_user = list(sub.followed_user for sub in subscripted_user)
-        display_review = list(models.Review.objects.filter(Q(user=request.user) ^ Q(user__in=subs_user)))
-        display_tickets = list(models.Ticket.objects.filter(Q(user=request.user) ^ Q(user__in=subs_user)))
+        display_review = list(models.Review.objects.filter(Q(user=request.user) | Q(user__in=subs_user)))
+        display_tickets = list(models.Ticket.objects.filter(Q(user=request.user) | Q(user__in=subs_user)))
         display_all = display_review + display_tickets
         display_all = sorted(display_all, key=lambda tc: tc.time_created,reverse=True)
         return render(request, "home.html", context={'feed':display_all})
+
+
 
 def ticket_form(request):
     form = forms.NewTicketForm()
@@ -37,23 +41,31 @@ def review_form(request):
     
 
 def subscription(request):
-    # faire un try à la place des ifs
-    form = forms.SocialForm()
-    all_users = auth.User.objects.all()
-    follows = models.UserFollows.objects.all()
+    to_subs = auth.User()
+    subscripted = models.UserFollows.objects.filter(user=request.user)
+    follows = models.UserFollows.objects.filter(followed_user=request.user)
+    to_subs_userfollows = models.UserFollows()
+    error_message = ''
     if request.method == 'POST':
-        form = forms.SocialForm(request.POST)
-        if form.is_valid():
-            subscription_list = list(follows)
-            save_form = form.save(commit=False)
-            user_subs_list = list()
-            for subs in subscription_list:
-                couple = (subs.user, subs.followed_user)
-                user_subs_list.append(couple)
-            new_subscription = (request.user, save_form.followed_user)
-            if new_subscription not in user_subs_list:
-                if request.user != save_form.followed_user:
-                    save_form.user = request.user
-                    save_form.save()
+        try:
+            to_subs = auth.User.objects.get(username=request.POST.get('searchbar'))
+            to_subs_userfollows = models.UserFollows(user=request.user,followed_user=to_subs)
+            to_subs_userfollows.save()
 
-    return render(request, "follow.html", context={'form':form, 'follows':follows})
+        except request.user == to_subs:
+            error_message = "Vous ne pouvez pas vous abonner a vous même"
+        
+        except to_subs.DoesNotExist:      
+            error_message = "Cet utilisateur n'existe pas"
+            
+        except IntegrityError:
+            error_message = "Vous ne pouver pas vous abonner à {}".format(to_subs)
+
+    return render(request, "follow.html", context={'subscripted':subscripted,'follows':follows, 'error':error_message})
+
+def unsuscribe(request, id):
+    print(id)
+    unfollow = models.UserFollows.objects.get(id=id)
+    if request.method == 'POST':
+        unfollow.delete()
+        return redirect('subscription')
