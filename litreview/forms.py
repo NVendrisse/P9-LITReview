@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from . import models
+from authentification import models as auth
 
 
 class NewTicketForm(forms.ModelForm):
@@ -10,6 +11,9 @@ class NewTicketForm(forms.ModelForm):
 
 
 class NewReviewForm(forms.ModelForm):
-    class Meta:
-        model = models.Review
-        fields = ["rating", "headline", "body"]
+    ticket_title = models.Ticket.title
+    ticket_description = models.Ticket.description
+    ticket_image = models.Ticket.image
+    review_rating = models.Review.rating
+    review_head = models.Review.headline
+    review_body = models.Review.body

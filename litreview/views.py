@@ -77,6 +77,7 @@ def subscription(request):
         "follow.html",
         context={
             "subscripted": subscripted,
+            "users": to_subs,
             "follows": follows,
             "error": error_message,
         },
