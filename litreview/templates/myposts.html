@@ -1,5 +1,71 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Mes posts</h2>
-    
+<div class="container">
+    {% for item in feed %}
+    {% if item.ticket %}
+    <div class="card">
+        <div class="card-header bg-primary">
+            <p class="font-italic">Publié par {{ item.user }} en réponse à {{ item.ticket.user }} le
+                {{ item.time_created }}</p>
+            <h4 class="card-title text-center">{{ item.headline }}</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ item.body }}</p>
+        </div>
+        <div class="card">
+            <div class="card-header bg-secondary">
+                <p class="font-italic">Publié par {{ item.ticket.user }} le {{ item.ticket.time_created }}</p>
+                <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ item.ticket.description }}</p>
+            </div>
+            <div class="card-footer bg-secondary">
+
+            </div>
+            <div class="card-footer bg-primary">
+                <form action="" method="post">{% csrf_token %}
+                    <button class="btn btn-info">
+                        <i class="fa fa-edit"></i>
+                        Modifier
+                    </button>
+                </form>
+                <form action="{% url 'delete' 'review' item.id %}" method="post">{% csrf_token %}
+                    <button class="btn btn-danger">
+                        <i class="fa fa-trash-alt"></i>
+                        Supprimer
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-header bg-secondary">
+            <p class="font-italic">Publié par {{ item.user }} le {{ item.time_created }}</p>
+            <h4 class="card-title text-center">{{ item.title }}</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ item.description }}</p>
+        </div>
+        <div class="card-footer bg-secondary">
+            <form action="" method="post">{% csrf_token %}
+                <button class="btn btn-info">
+                    <i class="fa fa-edit"></i>
+                    Modifier
+                </button>
+            </form>
+            <form action="{% url 'delete' 'ticket' item.id %}" method="post">{% csrf_token %}
+                <button class="btn btn-danger">
+                    <i class="fa fa-trash-alt"></i>
+                    Supprimer
+                </button>
+            </form>
+
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
 {% endblock content %}

@@ -1,64 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container-fluid">
-    <a href="{% url 'ticket' %}">
-        <button class="btn btn-outline-info">
-            <i class="fa fa-plus-square"></i>
-            Demander une critique
-        </button>
-    </a>
-    <a href="{% url 'review' %}">
-        <button class="btn btn-outline-warning">
-            <i class="fa fa-plus-square"></i>
-            Créer une critique
-        </button>
-    </a>
-</div>
-<div class="container"> 
+
+<div class="container">
+    <div class="container-fluid">
+        <a href="{% url 'ticket' %}">
+            <button class="btn btn-outline-info">
+                <i class="fa fa-plus-square"></i>
+                Demander une critique
+            </button>
+        </a>
+        <a href="{% url 'review' %}">
+            <button class="btn btn-outline-warning">
+                <i class="fa fa-plus-square"></i>
+                Créer une critique
+            </button>
+        </a>
+    </div>
     {% for item in feed %}
-        {% if item.ticket %}
-        <div class="card">   
-            <div class="card-header bg-primary">
-                <p class="font-italic">Publié par {{ item.user }} en réponse à {{ item.ticket.user }} le {{ item.time_created }}</p>
-                <h4 class="card-title text-center">{{ item.headline }}</h4>
-            </div>
-            <div class="card-body">
-                <p class="card-text">{{ item.body }}</p>
-            </div>
-                <div class="card">   
-                    <div class="card-header bg-secondary">
-                        <p class="font-italic">Publié par {{ item.ticket.user }} le {{ item.ticket.time_created }}</p>
-                        <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ item.ticket.description }}</p>
-                    </div>
-                    <div class="card-footer bg-secondary">
-                        
-                    </div>
-                <div class="card-footer bg-primary">
-                    
-                </div>
-            </div>
+    {% if item.ticket %}
+    <div class="card">
+        <div class="card-header bg-primary">
+            <p class="font-italic">Publié par {{ item.user }} en réponse à {{ item.ticket.user }} le
+                {{ item.time_created }}</p>
+            <h4 class="card-title text-center">{{ item.headline }}</h4>
         </div>
-        {% else %}
-        <div class="card">   
+        <div class="card-body">
+            <p class="card-text">{{ item.body }}</p>
+        </div>
+        <div class="card">
             <div class="card-header bg-secondary">
-                <p class="font-italic">Publié par {{ item.user }} le {{ item.time_created }}</p>
-                <h4 class="card-title text-center">{{ item.title }}</h4>
+                <p class="font-italic">Publié par {{ item.ticket.user }} le {{ item.ticket.time_created }}</p>
+                <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
             </div>
             <div class="card-body">
-                <p class="card-text">{{ item.description }}</p>
+                <p class="card-text">{{ item.ticket.description }}</p>
             </div>
             <div class="card-footer bg-secondary">
-                <button class="btn btn-outline-primary">
+
+            </div>
+            <div class="card-footer bg-primary">
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-header bg-secondary">
+            <p class="font-italic">Publié par {{ item.user }} le {{ item.time_created }}</p>
+            <h4 class="card-title text-center">{{ item.title }}</h4>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ item.description }}</p>
+        </div>
+        <div class="card-footer bg-secondary">
+            <form action="{% url 'review' item.id %}" method="post">{% csrf_token %}
+                <button class="btn btn-primary">
                     <i class="fa fa-pen-fancy"></i>
                     Créer une critique
                 </button>
-            </div>
+            </form>
+
         </div>
-        {% endif %}
+    </div>
+    {% endif %}
     {% endfor %}
-    
+
 </div>
 {% endblock content %}

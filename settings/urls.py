@@ -16,17 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from authentification import views as auth_view 
+from authentification import views as auth_view
 from litreview import views as main_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', auth_view.login_page, name='login'),
-    path('logout/', auth_view.log_out, name='logout'),
-    path('new_account/', auth_view.create_user, name="signup"),
-    path('home/', main_views.personnal_feed, name="home"),
-    path('newticket/', main_views.ticket_form, name="ticket"),
-    path('newreview/', main_views.review_form, name="review"),
-    path('subscription/', main_views.subscription, name="subscription"),
-    path('unsuscribe/<int:id>/', main_views.unsuscribe, name="unsuscribe"),
+    path("admin/", admin.site.urls),
+    path("", auth_view.login_page, name="login"),
+    path("logout/", auth_view.log_out, name="logout"),
+    path("new_account/", auth_view.create_user, name="signup"),
+    path("home/", main_views.personnal_feed, name="home"),
+    path("newticket/", main_views.ticket_form, name="ticket"),
+    path("newreview/<ticket_id>/", main_views.review_form, name="review"),
+    path("newreview/", main_views.review_form, name="review"),
+    path("subscription/", main_views.subscription, name="subscription"),
+    path("unsuscribe/<int:id>/", main_views.unsuscribe, name="unsuscribe"),
+    path("delete/<str:type>/<int:id>/", main_views.delete_post, name="delete"),
+    path("myposts/", main_views.my_posts, name="myposts"),
 ]

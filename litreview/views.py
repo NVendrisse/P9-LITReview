@@ -21,10 +21,13 @@ def personnal_feed(request):
 
 
 def my_posts(request):
-    display_review = list(models.Review.objects.filter(user=request.user))
-    display_tickets = list(models.Ticket.objects.filter(user=request.user))
-    display_all = display_review + display_tickets
-    display_all = sorted(display_all, key=lambda tc: tc.time_created, reverse=True)
+    display_myreview = list(models.Review.objects.filter(user=request.user))
+    display_mytickets = list(models.Ticket.objects.filter(user=request.user))
+    display_mypost = display_myreview + display_mytickets
+    display_mypost = sorted(
+        display_mypost, key=lambda tc: tc.time_created, reverse=True
+    )
+    return render(request, "myposts.html", context={"feed": display_mypost})
 
 
 def ticket_form(request):
@@ -39,16 +42,34 @@ def ticket_form(request):
     return render(request, "new_ticket.html", context={"form": form})
 
 
-def review_form(request):
+def review_form(request, ticket_id: int = None):
     form = forms.NewReviewForm()
+    if not ticket_id == None:
+        ticket_item = models.Ticket.objects.get(id=ticket_id)
+        t_form = forms.NewTicketForm(instance=ticket_item)
+        t_form.fields["title"].widget.attrs["readonly"] = True
+        t_form.fields["description"].widget.attrs["readonly"] = True
+        t_form.fields["image"].widget.attrs["readonly"] = True
+    else:
+        t_form = forms.NewTicketForm()
+
     if request.method == "POST":
+        if ticket_id == None:
+            t_form = forms.NewTicketForm(request.POST)
+            if t_form.is_valid():
+                t_save = t_form.save(commit=False)
+                t_save.user = request.user
+                t_save.save()
+                ticket_id = t_save.id
+
         form = forms.NewReviewForm(request.POST)
         if form.is_valid():
             save = form.save(commit=False)
+            save.ticket_id = ticket_id
             save.user = request.user
             save.save()
             return redirect("home")
-    return render(request, "new_review.html", context={"form": form})
+    return render(request, "new_review.html", context={"form": form, "ticket": t_form})
 
 
 def subscription(request):
@@ -59,12 +80,14 @@ def subscription(request):
     error_message = ""
     if request.method == "POST":
         try:
-            # if
             to_subs = auth.User.objects.get(username=request.POST.get("searchbar"))
-            to_subs_userfollows = models.UserFollows(
-                user=request.user, followed_user=to_subs
-            )
-            to_subs_userfollows.save()
+            if not to_subs == request.user:
+                to_subs_userfollows = models.UserFollows(
+                    user=request.user, followed_user=to_subs
+                )
+                to_subs_userfollows.save()
+            else:
+                raise IntegrityError
 
         except to_subs.DoesNotExist:
             error_message = "Cet utilisateur n'existe pas"
@@ -85,8 +108,17 @@ def subscription(request):
 
 
 def unsuscribe(request, id):
-    print(id)
     unfollow = models.UserFollows.objects.get(followed_user_id=id, user=request.user)
     if request.method == "POST":
         unfollow.delete()
         return redirect("subscription")
+
+
+def delete_post(request, type, id):
+    if type == "ticket":
+        delete = models.Ticket.objects.get(id=id)
+    elif type == "review":
+        delete = models.Review.objects.get(id=id)
+    if request.method == "POST":
+        delete.delete()
+        return redirect("myposts")

@@ -2,9 +2,12 @@
 {% block content %}
 <div>
     <form method="post">
-        <div class="form-group"></div>
-
-        {{ form }}
+        <div class="form-group">
+            {{ ticket.as_p }}
+        </div>
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
         {% csrf_token %}
 
 </div>
