@@ -4,8 +4,10 @@ from django.db import IntegrityError
 from . import forms, models
 from authentification import models as auth
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def personnal_feed(request):
     subscripted_user = models.UserFollows.objects.filter(user=request.user)
     subs_user = list(sub.followed_user for sub in subscripted_user)
@@ -20,6 +22,7 @@ def personnal_feed(request):
     return render(request, "home.html", context={"feed": display_all})
 
 
+@login_required
 def my_posts(request):
     display_myreview = list(models.Review.objects.filter(user=request.user))
     display_mytickets = list(models.Ticket.objects.filter(user=request.user))
@@ -30,29 +33,48 @@ def my_posts(request):
     return render(request, "myposts.html", context={"feed": display_mypost})
 
 
-def ticket_form(request):
-    form = forms.NewTicketForm()
+@login_required
+def ticket_form(request, ticket_id: int = None):
+    if not ticket_id == None:
+        existing_ticket = models.Ticket.objects.get(id=ticket_id)
+        if request.user == existing_ticket.user:
+            form = forms.NewTicketForm(instance=existing_ticket)
+        else:
+            return redirect("home")
+    else:
+        existing_ticket = None
+        form = forms.NewTicketForm()
+
     if request.method == "POST":
-        form = forms.NewTicketForm(request.POST)
+        form = forms.NewTicketForm(
+            request.POST, request.FILES, instance=existing_ticket
+        )
         if form.is_valid():
             save_form = form.save(commit=False)
             save_form.user = request.user
             save_form.save()
             return redirect("home")
+
     return render(request, "new_ticket.html", context={"form": form})
 
 
-def review_form(request, ticket_id: int = None):
+@login_required
+def review_form(request, ticket_id: int = None, review_id: int = None):
     form = forms.NewReviewForm()
     if not ticket_id == None:
         ticket_item = models.Ticket.objects.get(id=ticket_id)
         t_form = forms.NewTicketForm(instance=ticket_item)
-        t_form.fields["title"].widget.attrs["readonly"] = True
-        t_form.fields["description"].widget.attrs["readonly"] = True
-        t_form.fields["image"].widget.attrs["readonly"] = True
+        if not request.user == ticket_item.user:
+            for field in t_form.fields:
+                t_form.fields[field].widget.attrs["readonly"] = True
     else:
         t_form = forms.NewTicketForm()
-
+    if not review_id == None:
+        review_item = models.Review.objects.get(id=review_id)
+        form = forms.NewReviewForm(instance=review_item)
+    else:
+        review_item = None
+        form = forms.NewTicketForm()
     if request.method == "POST":
         if ticket_id == None:
             t_form = forms.NewTicketForm(request.POST)
@@ -62,7 +84,7 @@ def review_form(request, ticket_id: int = None):
                 t_save.save()
                 ticket_id = t_save.id
 
-        form = forms.NewReviewForm(request.POST)
+        form = forms.NewReviewForm(request.POST, instance=review_item)
         if form.is_valid():
             save = form.save(commit=False)
             save.ticket_id = ticket_id
@@ -72,6 +94,7 @@ def review_form(request, ticket_id: int = None):
     return render(request, "new_review.html", context={"form": form, "ticket": t_form})
 
 
+@login_required
 def subscription(request):
     to_subs = auth.User()
     subscripted = models.UserFollows.objects.filter(user=request.user)
@@ -107,6 +130,7 @@ def subscription(request):
     )
 
 
+@login_required
 def unsuscribe(request, id):
     unfollow = models.UserFollows.objects.get(followed_user_id=id, user=request.user)
     if request.method == "POST":
@@ -114,6 +138,7 @@ def unsuscribe(request, id):
         return redirect("subscription")
 
 
+@login_required
 def delete_post(request, type, id):
     if type == "ticket":
         delete = models.Ticket.objects.get(id=id)
@@ -121,4 +146,4 @@ def delete_post(request, type, id):
         delete = models.Review.objects.get(id=id)
     if request.method == "POST":
         delete.delete()
-        return redirect("myposts")
+    return redirect("myposts")

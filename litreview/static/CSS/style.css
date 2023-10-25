@@ -1,0 +1,20 @@
+.front_yellow {
+    color: #BAFF39;
+}
+
+.menu_yellow:link {
+    color: #BAFF39;
+}
+
+.menu_yellow:hover {
+    color: #68911d;
+}
+
+.background_grey {
+    background-color: #6E6E6E;
+}
+
+.styleCard {
+    margin: 1%;
+    border: 1px #FFCC00;
+}

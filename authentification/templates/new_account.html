@@ -1,13 +1,16 @@
 {% extends 'auth_base.html' %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
-        <h1>New account</h1>
-        <p>Welcome to LITReview</p>
-        <section>
-            <form method="post">
-                {{form.as_p}}
-                {% csrf_token %}
-                <button type="submit" >Log In</button>
-            </form>
-        </section>
-    </body>
+<h1>New account</h1>
+<p>Welcome to LITReview</p>
+<div class=" card container">
+    <form method="post">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <button type="submit">Log In</button>
+    </form>
+</div>
+</body>
 {% endblock content %}

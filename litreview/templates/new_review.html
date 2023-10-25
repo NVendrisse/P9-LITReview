@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
-<div>
+<div class="container form-floating">
     <form method="post">
         <div class="form-group">
-            {{ ticket.as_p }}
+            {{ ticket|crispy }}
         </div>
         <div class="form-group">
-            {{ form.as_p }}
+            {{ form|crispy }}
         </div>
         {% csrf_token %}
 
