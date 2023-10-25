@@ -7,11 +7,13 @@ from . import forms
 
 @login_required
 def log_out(user):
+    # Fonction de déconnexion
     logout(user)
     return redirect("login")
 
 
 def login_page(requested_user):
+    # Fonction de rendu de connexion
     form = forms.LoginForm()
     if requested_user.method == "POST":
         form = forms.LoginForm(requested_user.POST)
@@ -27,6 +29,7 @@ def login_page(requested_user):
 
 
 def create_user(new_user):
+    # Fonction de rendu de création d'utilisateur
     form = forms.CreateNewAccount()
     if new_user.method == "POST":
         form = forms.CreateNewAccount(new_user.POST)

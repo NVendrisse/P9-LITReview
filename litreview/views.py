@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def personnal_feed(request):
+    # Modele de rendu de la page d'accueil
     subscripted_user = models.UserFollows.objects.filter(user=request.user)
     subs_user = list(sub.followed_user for sub in subscripted_user)
     display_review = list(
@@ -24,6 +25,7 @@ def personnal_feed(request):
 
 @login_required
 def my_posts(request):
+    # Modele de rendu du flux des post de l'utilisateur
     display_myreview = list(models.Review.objects.filter(user=request.user))
     display_mytickets = list(models.Ticket.objects.filter(user=request.user))
     display_mypost = display_myreview + display_mytickets
@@ -35,6 +37,7 @@ def my_posts(request):
 
 @login_required
 def ticket_form(request, ticket_id: int = None):
+    # Modele de rendu de la création et édition des tickets
     if not ticket_id == None:
         existing_ticket = models.Ticket.objects.get(id=ticket_id)
         if request.user == existing_ticket.user:
@@ -60,6 +63,7 @@ def ticket_form(request, ticket_id: int = None):
 
 @login_required
 def review_form(request, ticket_id: int = None, review_id: int = None):
+    # Modele de rendu de la création et édition des critiques
     form = forms.NewReviewForm()
     if not ticket_id == None:
         ticket_item = models.Ticket.objects.get(id=ticket_id)
@@ -96,6 +100,7 @@ def review_form(request, ticket_id: int = None, review_id: int = None):
 
 @login_required
 def subscription(request):
+    # Modele de rendu de l'abonnement (faire nouvel abonnement, voir ses abonnés et abonnements)
     to_subs = auth.User()
     subscripted = models.UserFollows.objects.filter(user=request.user)
     follows = models.UserFollows.objects.filter(followed_user=request.user)
@@ -132,6 +137,7 @@ def subscription(request):
 
 @login_required
 def unsuscribe(request, id):
+    # Modele de rendu du désabonnement
     unfollow = models.UserFollows.objects.get(followed_user_id=id, user=request.user)
     if request.method == "POST":
         unfollow.delete()
@@ -140,6 +146,7 @@ def unsuscribe(request, id):
 
 @login_required
 def delete_post(request, type, id):
+    # Modele de rendu de la supression des tickets et critiques
     if type == "ticket":
         delete = models.Ticket.objects.get(id=id)
     elif type == "review":
