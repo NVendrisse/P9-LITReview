@@ -37,7 +37,16 @@
                 <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
             </div>
             <div class="card-body">
-                <p class="card-text">{{ item.ticket.description }}</p>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">{{ item.ticket.description }}</p>
+                    </div>
+                    <div class="col">
+                        {% if item.ticket.image %}
+                        <img src="{{ item.ticket.image.url }}" alt="img" style="max-width: 720px;max-height: 1280px;">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <div class="card-footer">
 
@@ -54,7 +63,16 @@
             <h4 class="card-title text-center">{{ item.title }}</h4>
         </div>
         <div class="card-body">
-            <p class="card-text">{{ item.description }}</p>
+            <div class="row">
+                <div class="col">
+                    <p class="card-text">{{ item.description }}</p>
+                </div>
+                <div class="col">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="img" style="max-width: 720px;max-height: 1280px;">
+                    {% endif %}
+                </div>
+            </div>
         </div>
         <div class="card-footer">
             <form action="{% url 'review' item.id %}" method="post">{% csrf_token %}

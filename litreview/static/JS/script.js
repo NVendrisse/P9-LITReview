@@ -11,12 +11,15 @@ function confirmDelete(e) {
             const id = e.target.attributes.item_id.nodeValue;
             const type = e.target.attributes.item_type.nodeValue;
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
             fetch("/delete/" + type + "/" + id + "/", {
                 method: "POST",
                 credentials: 'same-origin',
                 headers: { 'X-CSRFToken': csrftoken }
-            })
-
+            }).then((res) => {
+                // redirect to refresh the tickets.
+                window.location = window.location;
+            });
         }
     })
 }

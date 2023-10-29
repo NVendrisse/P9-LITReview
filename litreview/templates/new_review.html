@@ -5,16 +5,14 @@
 {% block content %}
 <div class="container form-floating">
     <form method="post">
-        <div class="form-group">
+        <div class="form-group" enctype="multipart/form-data">
             {{ ticket|crispy }}
         </div>
         <div class="form-group">
             {{ form|crispy }}
         </div>
         {% csrf_token %}
-
-</div>
-<button class="btn btn-success" type="submit">Poster</button>
-</form>
+        <button class="btn btn-success" type="submit">Poster</button>
+    </form>
 </div>
 {% endblock content %}

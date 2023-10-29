@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<h2>Suivre des utilisateurs</h2>
+
 {% if error %}
 <div class="alert alert-danger alert-dismissible fade show">
     <p>{{error}}</p>
 </div>
 {% endif %}
 <div class="container">
+    <h2>Suivre des utilisateurs</h2>
     <form class="form-horizontal" method="post">
         <div class="form-group">
             <input list="users" name="searchbar" class="form-control" placeholder="Rechercher un utilisateur">
@@ -28,7 +29,7 @@
         {% for person in subscripted %}
         <tr>
             <td>{{ person.followed_user }}</td>
-            <td>
+            <td style="display: flex;flex-direction: row-reverse;">
                 <form action="{% url 'unsuscribe' person.followed_user.id %}" method="post">{% csrf_token %}<button
                         class="btn btn-warning">Se désabonner</button></form>
             </td>

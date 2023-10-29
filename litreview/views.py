@@ -13,7 +13,9 @@ def personnal_feed(request):
     subscripted_user = models.UserFollows.objects.filter(user=request.user)
     subs_user = list(sub.followed_user for sub in subscripted_user)
     display_review = list(
-        models.Review.objects.filter(Q(user=request.user) | Q(user__in=subs_user))
+        models.Review.objects.filter(
+            Q(user=request.user) | Q(user__in=subs_user) | Q(ticket__user=request.user)
+        )
     )
     display_tickets = list(
         models.Ticket.objects.filter(Q(user=request.user) | Q(user__in=subs_user))
@@ -37,7 +39,9 @@ def my_posts(request):
 
 @login_required
 def ticket_form(request, ticket_id: int = None):
-    # Modele de rendu de la création et édition des tickets
+    """
+    Modele de rendu de la création et édition des tickets
+    """
     if not ticket_id == None:
         existing_ticket = models.Ticket.objects.get(id=ticket_id)
         if request.user == existing_ticket.user:
@@ -52,6 +56,7 @@ def ticket_form(request, ticket_id: int = None):
         form = forms.NewTicketForm(
             request.POST, request.FILES, instance=existing_ticket
         )
+        print(request.FILES)
         if form.is_valid():
             save_form = form.save(commit=False)
             save_form.user = request.user
@@ -63,7 +68,9 @@ def ticket_form(request, ticket_id: int = None):
 
 @login_required
 def review_form(request, ticket_id: int = None, review_id: int = None):
-    # Modele de rendu de la création et édition des critiques
+    """
+    Modele de rendu de la création et édition des critiques
+    """
     form = forms.NewReviewForm()
     if not ticket_id == None:
         ticket_item = models.Ticket.objects.get(id=ticket_id)
@@ -78,7 +85,7 @@ def review_form(request, ticket_id: int = None, review_id: int = None):
         form = forms.NewReviewForm(instance=review_item)
     else:
         review_item = None
-        form = forms.NewTicketForm()
+        form = forms.NewReviewForm()
     if request.method == "POST":
         if ticket_id == None:
             t_form = forms.NewTicketForm(request.POST)

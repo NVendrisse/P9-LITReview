@@ -19,12 +19,21 @@
                 <h4 class="card-title text-center">{{ item.ticket.title }}</h4>
             </div>
             <div class="card-body">
-                <p class="card-text">{{ item.ticket.description }}</p>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">{{ item.ticket.description }}</p>
+                    </div>
+                    <div class="col">
+                        {% if item.ticket.image %}
+                        <img src="{{ item.ticket.image.url }}" alt="img" style="max-width: 720px;max-height: 1280px;">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <div class="card-footer">
 
             </div>
-            <div class="card-footer bg-primary">
+            <div style="flex-direction: row;display: flex;" class="card-footer bg-primary">
                 <form action="{% url 'review' item.ticket.id item.id %}" method="get">{% csrf_token %}
                     <button class="btn btn-info">
                         <i class="fa fa-edit"></i>
@@ -45,9 +54,18 @@
             <h4 class="card-title text-center">{{ item.title }}</h4>
         </div>
         <div class="card-body">
-            <p class="card-text">{{ item.description }}</p>
+            <div class="row">
+                <div class="col">
+                    <p class="card-text">{{ item.description }}</p>
+                </div>
+                <div class="col">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="img" style="max-width: 720px;max-height: 1280px;">
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="card-footer">
+        <div style="flex-direction: row;display: flex;" class="card-footer">
             <form action="{% url 'ticket' item.id %}" method="get">{% csrf_token %}
                 <button class="btn btn-info">
                     <i class="fa fa-edit"></i>
