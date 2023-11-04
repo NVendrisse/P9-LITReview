@@ -12,6 +12,48 @@
         </div>
         <div class="card-body">
             <p class="card-text">{{ item.body }}</p>
+            {% if item.rating is 0 %}
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            {% endif %}
+            {% if item.rating is 1 %}
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            {% endif %}
+            {% if item.rating is 2 %}
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            {% endif %}
+            {% if item.rating is 3 %}
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            {% endif %}
+            {% if item.rating is 4 %}
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star"></i>
+            {% endif %}
+            {% if item.rating is 5 %}
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            <i class="fa fa-star checked"></i>
+            {% endif %}
         </div>
         <div class="card">
             <div class="card-header">

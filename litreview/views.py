@@ -152,12 +152,13 @@ def unsuscribe(request, id):
 
 
 @login_required
-def delete_post(request, type, id):
+def delete_post(request, type, id):  # idenfication +++
     # Modele de rendu de la supression des tickets et critiques
     if type == "ticket":
         delete = models.Ticket.objects.get(id=id)
     elif type == "review":
         delete = models.Review.objects.get(id=id)
     if request.method == "POST":
-        delete.delete()
+        if delete.user == request.user:
+            delete.delete()
     return redirect("myposts")
